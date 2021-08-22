@@ -1,6 +1,6 @@
 # SZU Auto Connect
 
-![web](https://img.shields.io/badge/SZU--AutoConnect-v1.0.0-green)
+![web](https://img.shields.io/badge/SZU--AutoConnect-v1.0.2-green)
 
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/szu-autoconnect)](https://pypi.python.org/pypi/szu-autoconnect/)
 
@@ -13,7 +13,7 @@
 ## 下载 exe 文件运行
 
 前往 [Release](https://github.com/ackness/szu-autoconnect/releases) 下载所有版本, 
-或者 [点击直接下载 V1.0.1 版本](https://github.com/ackness/szu-autoconnect/releases/download/v1.0.1/SZU-AutoConnect-V1.0.1.exe).
+或者 [点击直接下载 V1.0.2 版本](https://github.com/ackness/szu-autoconnect/releases/download/v1.0.1/SZU-AutoConnect-V1.0.1.exe).
 
 ## 从 pip 安装与运行 
 
@@ -34,19 +34,19 @@ pip install szu-autoconnect
 ![](_assets/ui.png)
 
 ```bash
-python -m szu-autoconnect.run -ui
+python -m szu_autoconnect.run -ui
 ```
 
 ### 使用命令行
 
 ```bash
-python -m szu-autoconnect.run -u username -p password
+python -m szu_autoconnect.run -u username -p password
 ```
 
 ### 参数帮助
 
 ```bash
-python -m szu-autoconnect.run --help
+python -m szu_autoconnect.run --help
 ```
 
 ## 从源码运行
@@ -55,8 +55,8 @@ python -m szu-autoconnect.run --help
 
 ```bash
 git clone https://github.com/ackness/szu-autoconnect.git
-
-cd szu-autoconnect/szu-autoconnect
+cd szu-autoconnect/
+python setup.py install
 ```
 
 ### 基本环境
@@ -103,7 +103,7 @@ optional arguments:
 ```
 python -m pysimplegui-exemaker.pysimplegui-exemaker
 
-选择 only_ui.py 文件, 进行打包
+选择 open_ui.py 文件, 进行打包
 ```
 
 # 原理
