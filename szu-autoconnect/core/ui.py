@@ -1,10 +1,57 @@
 import datetime
 import threading
+from json import (load as jsonload, dump as jsondump)
 
 import PySimpleGUI as sg
 from apscheduler.schedulers.background import BlockingScheduler
 
-from .auto import Connector
+from . import Connector
+
+# SETTINGS_FILE = path.join(path.dirname(__file__), r'settings.cfg')
+SETTINGS_FILE = 'settings.cfg'
+DEFAULT_SETTINGS = {
+    'username': '',
+    'password': '',
+    'office': True,
+    'dormitory': False,
+    'interval': 20,
+    'pin': True,
+}
+# "Map" from the settings dictionary keys to the window's element keys
+SETTINGS_KEYS_TO_ELEMENT_KEYS = {
+    'username': '-username-',
+    'password': '-password-',
+    'office': '-office-',
+    'dormitory': '-dormitory-',
+    'interval': '-interval-',
+    'pin': '-pin-',
+}
+
+
+def load_settings(settings_file, default_settings):
+    try:
+        with open(settings_file, 'r') as f:
+            settings = jsonload(f)
+    except Exception as e:
+        print('load from default settings')
+        settings = default_settings
+        save_settings(settings_file, settings, None)
+    return settings
+
+
+def save_settings(settings_file, settings, values):
+    if values:  # if there are stuff specified by another window, fill in those values
+        for key in SETTINGS_KEYS_TO_ELEMENT_KEYS:  # update window with the values read from settings file
+            try:
+                settings[key] = values[SETTINGS_KEYS_TO_ELEMENT_KEYS[key]]
+            except Exception as e:
+                print(f'{e}')
+
+    with open(settings_file, 'w') as f:
+        jsondump(settings, f)
+
+    if values:
+        sg.popup('Settings saved')
 
 
 def create_auto_connection(config, window):
@@ -28,7 +75,7 @@ def start_work(scheduler):
         scheduler.start()
 
 
-def create_ui():
+def create_ui(settings):
     sg.theme('Topanga')
     title_font = ('Gigi', 18)
     config_name_font = ('宋体', 10)
@@ -45,7 +92,7 @@ def create_ui():
             sg.Col(
                 [
                     [
-                        sg.Check('Pin', enable_events=True, key='pin'),
+                        sg.Check('Pin', enable_events=True, key='-pin-'),
                         sg.Text(sg.SYMBOL_X, enable_events=True, key='-X-')  # '❎'
                     ]
                 ],
@@ -67,20 +114,20 @@ def create_ui():
         layout=[
             [
                 sg.Text('网络选择: ', font=config_name_font, size=(10, 1)),
-                sg.Radio('教学区', key='office', group_id='zone', default=True),
-                sg.Radio('宿舍区', key='dormitory', group_id='zone')
+                sg.Radio('教学区', key='-office-', group_id='zone', default=True),
+                sg.Radio('宿舍区', key='-dormitory-', group_id='zone')
             ],
             [
                 sg.Text('用户名: ', font=config_name_font, size=(10, 1)),
-                sg.In(key='username', size=(25, 1))
+                sg.In(key='-username-', size=(25, 1))
             ],
             [
                 sg.Text('密码: ', font=config_name_font, size=(10, 1)),
-                sg.In(key='password', size=(25, 1), password_char='*')
+                sg.In(key='-password-', size=(25, 1), password_char='*')
             ],
             [
                 sg.Text('间隔(s): ', font=config_name_font, size=(10, 1)),
-                sg.Spin(values=[i for i in range(1, 1000)], initial_value=10, key='interval', size=(23, 1))
+                sg.Spin(values=[i for i in range(1, 1000)], initial_value=10, key='-interval-', size=(23, 1))
             ]
         ],
         title='Configs'
@@ -106,34 +153,40 @@ def create_ui():
 
     # return sg.Window('* SZU Auto Connector *', layout=total_ui, font='Helvetica 10', )
 
-    return sg.Window('* SZU Auto Connector *', layout=total_ui, font='Helvetica 10', no_titlebar=True)
+    window = sg.Window('* SZU Auto Connector *', layout=total_ui, font='Helvetica 10',
+                       no_titlebar=True, finalize=True, keep_on_top=settings['pin']
+                       )
+
+    for k, v in SETTINGS_KEYS_TO_ELEMENT_KEYS.items():  # update window with the values read from settings file
+        try:
+            window[SETTINGS_KEYS_TO_ELEMENT_KEYS[k]].update(value=settings[k])
+        except Exception as e:
+            print(e)
+
+    return window
 
 
 def main_loop():
-    window = None
-    connector = None
+    window, settings = None, load_settings(SETTINGS_FILE, DEFAULT_SETTINGS)
     scheduler = None
     pause_flag = None
     while True:
         if window is None:
-            window = create_ui()
-        event, values = window.Read()
-
-        # print(event)
-        # print(values)
+            window = create_ui(settings)
+        event, values = window.read()
 
         if event == 'Login':
-            if values['office']:
+            if values['-office-']:
                 zone = 'office'
-            elif values['dormitory']:
+            elif values['-dormitory-']:
                 zone = 'dormitory'
             else:
                 zone = ''
             configs = {
-                'username': values['username'],
-                'password': values['password'],
+                'username': values['-username-'],
+                'password': values['-password-'],
                 'zone': zone,
-                'interval': values['interval']
+                'interval': values['-interval-']
             }
             if not scheduler:
                 connector, scheduler = create_auto_connection(configs, window)
@@ -145,6 +198,8 @@ def main_loop():
             if scheduler:
                 window['log'].print('Start a Job')
                 threading.Thread(target=start_work, args=(scheduler,), daemon=True).start()
+
+            window['Login'].update(disabled=True)
 
         if event in ['Pause', 'Resume']:
             if not scheduler:
@@ -162,16 +217,17 @@ def main_loop():
                     pause_flag = False
 
         if event == 'Save':
-            window['log'].print('save')
+            save_settings(SETTINGS_FILE, settings, values)
+            window.close()
+            window = None
 
         if event in (None, 'Exit', '-X-'):
             break
 
-        if event == 'pin':
-            # print('pin window')
-            window['log'].print('暂时有问题, 不做了')
-            window.KeepOnTop = values['pin']
-            window.refresh()
+        if event == '-pin-':
+            window.close()
+            window = None
+            settings['pin'] = values['-pin-']
 
     window.close()
 
