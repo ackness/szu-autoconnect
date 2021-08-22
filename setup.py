@@ -2,7 +2,8 @@ from setuptools import setup, find_packages
 
 setup(
     name='szu-autoconnect',
-    packages=find_packages(),
+    packages=find_packages(include=['szu-autoconnect'], exclude=['build', 'dist']),
+    package_dir={'szu-autoconnect': 'szu-autoconnect'},
     version='1.0.0',
     license='MIT',
     description='A simple way to get different DEXs abis for block chains.',

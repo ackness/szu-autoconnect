@@ -91,6 +91,14 @@ optional arguments:
 
 ```
 
+#### 打包
+
+```
+python -m pysimplegui-exemaker.pysimplegui-exemaker
+
+选择 only_ui.py 文件, 进行打包
+```
+
 # 原理
 
 使用构造`POST 表单`完成上网请求, 和直接在网页端登录是一样的.
