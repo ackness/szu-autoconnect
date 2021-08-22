@@ -3,10 +3,10 @@ import argparse
 
 def build_config():
     args = argparse.ArgumentParser("SZU Auto Reconnect")
-    args.add_argument('--username', '-u', default='', help="your username")
-    args.add_argument('--password', '-p', default='', help="your password")
-    args.add_argument('--zone', '-z', default='office', choices=['office', 'dormitory'], help="which zone")
-    args.add_argument('--interval', '-i', default=60, help="time interval to check connection status")
+    args.add_argument('--username', '-u', default='', type=str, help="your username")
+    args.add_argument('--password', '-p', default='', type=str, help="your password")
+    args.add_argument('--zone', '-z', default='office', type=str, choices=['office', 'dormitory'], help="which zone")
+    args.add_argument('--interval', '-i', default=60, type=int, help="time interval to check connection status")
     args.add_argument('--use_ui', '-ui', action='store_true', help="whether to use UI")
 
     return args.parse_args()

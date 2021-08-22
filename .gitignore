@@ -130,3 +130,5 @@ dmypy.json
 
 auto-connect.log
 release/*
+
+.idea/*
