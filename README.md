@@ -2,7 +2,7 @@
 
 ![web](https://img.shields.io/badge/SZU--AutoConnect-v1.0.3-green)
 
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/szu-autoconnect)](https://pypi.python.org/pypi/szu-autoconnect/)
+![web](https://img.shields.io/badge/Python-≥3.6-blue)
 
 # 1. 起源
 
@@ -15,7 +15,7 @@
 ## 2.1 下载 exe 文件运行
 
 前往 [Release](https://github.com/ackness/szu-autoconnect/releases) 下载所有版本, 
-或者 [点击直接下载 V1.0.2 版本](https://github.com/ackness/szu-autoconnect/releases/download/v1.0.3/SZU-AutoConnect-V1.0.3.exe).
+或者 [点击直接下载 V1.0.3 版本](https://github.com/ackness/szu-autoconnect/releases/download/v1.0.3/SZU-AutoConnect-V1.0.3.exe).
 
 ## 2.2 从 pip 安装与运行 
 
@@ -24,7 +24,7 @@
 ### 2.2.1 安装
 
 ```bash
-pip install szu-autoconnect
+pip install -U szu-autoconnect
 ```
 
 ### 2.2.2 运行
