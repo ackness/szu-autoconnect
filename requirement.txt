@@ -1,0 +1,5 @@
+PySimpleGUI
+apscheduler
+loguru
+retrying
+requests
