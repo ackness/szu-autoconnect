@@ -4,30 +4,32 @@
 
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/szu-autoconnect)](https://pypi.python.org/pypi/szu-autoconnect/)
 
-# 起源
+# 1. 起源
 
 垃圾深大校园网, 最近一天能掉线一万次, 这个脚本可以帮助你一直保持在线状态. 也可用用于服务器的正常上网.
 
-# 安装和运行
+# 2. 安装和运行
 
-## 下载 exe 文件运行
+你可以选择下面随便一种方式安装
+
+## 2.1 下载 exe 文件运行
 
 前往 [Release](https://github.com/ackness/szu-autoconnect/releases) 下载所有版本, 
 或者 [点击直接下载 V1.0.2 版本](https://github.com/ackness/szu-autoconnect/releases/download/v1.0.2/SZU-AutoConnect-V1.0.2.exe).
 
-## 从 pip 安装与运行 
+## 2.2 从 pip 安装与运行 
 
 `如果你不需要重写功能或者定制其他功能, 推荐这个方式运行`
 
-安装
+### 2.2.1 安装
 
 ```bash
 pip install szu-autoconnect
 ```
 
-## 运行
+### 2.2.2 运行
 
-### 使用 ui 界面
+#### 使用 ui 界面
 
 界面截图
 
@@ -37,21 +39,21 @@ pip install szu-autoconnect
 python -m szu_autoconnect.run -ui
 ```
 
-### 使用命令行
+#### 使用命令行
 
 ```bash
 python -m szu_autoconnect.run -u username -p password
 ```
 
-### 参数帮助
+#### 参数帮助
 
 ```bash
 python -m szu_autoconnect.run --help
 ```
 
-## 从源码运行
+## 2.3 从源码运行
 
-### 安装
+### 2.3.1 安装
 
 ```bash
 git clone https://github.com/ackness/szu-autoconnect.git
@@ -59,13 +61,13 @@ cd szu-autoconnect/
 python setup.py install
 ```
 
-### 基本环境
+### 2.3.2 基本环境
 1. `python >= 3.6`, 2021年了最好是 3.9 
 2. 安装 `requirement.txt` 里面的库, `pip install -r requirement.txt`
 3. `内网`环境
 4. `正确的账号密码` 和 `未欠费的套餐`
 
-### 用法
+### 2.3.3 用法
 
 #### 使用 ui 界面
 
@@ -106,12 +108,12 @@ python -m pysimplegui-exemaker.pysimplegui-exemaker
 选择 open_ui.py 文件, 进行打包
 ```
 
-# 原理
+# 3. 原理
 
 使用构造`POST 表单`完成上网请求, 和直接在网页端登录是一样的.
 
 
-# 前人的肩膀
+# 4. 前人的肩膀
 
 相较于 [AutoConnect](https://github.com/LinusWu/AutoConnect), 改进的地方如下:
 
@@ -122,7 +124,7 @@ python -m pysimplegui-exemaker.pysimplegui-exemaker
 5. 增加 ui, 可以替代垃圾 Drcom
 
 
-# 申明
+# 5. 申明
 
 1. 禁止用此脚本干扰他人正常上网
 2. 本脚本使用构造POST表单完成上网请求, 完全安全可信
