@@ -12,8 +12,8 @@
 
 ## 下载 exe 文件运行
 
-前往 [Release](https://github.com/ackness/szu-autoconnect/releases) 下载所有版本, 或者 [点击直接下载V1.0.0](https://github.com/ackness/szu-autoconnect/releases/download/v1.0.0/SZU-AutoConnect-V1.0.0.exe
-).
+前往 [Release](https://github.com/ackness/szu-autoconnect/releases) 下载所有版本, 
+或者 [点击直接下载 V1.0.1 版本](https://github.com/ackness/szu-autoconnect/releases/download/v1.0.1/SZU-AutoConnect-V1.0.1.exe).
 
 ## 从 pip 安装与运行 
 
