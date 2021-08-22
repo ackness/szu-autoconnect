@@ -5,9 +5,8 @@ from json import (load as jsonload, dump as jsondump)
 import PySimpleGUI as sg
 from apscheduler.schedulers.background import BlockingScheduler
 
-from . import Connector
+from szu_autoconnect.core.auto import Connector
 
-# SETTINGS_FILE = path.join(path.dirname(__file__), r'settings.cfg')
 SETTINGS_FILE = 'settings.cfg'
 DEFAULT_SETTINGS = {
     'username': '',
@@ -231,6 +230,5 @@ def main_loop():
 
     window.close()
 
-
-if __name__ == '__main__':
-    main_loop()
+# if __name__ == '__main__':
+#     main_loop()

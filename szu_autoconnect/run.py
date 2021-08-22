@@ -14,7 +14,7 @@ def build_config():
 
 def create_job(configs):
     import datetime
-    from .core.auto import Connector
+    from szu_autoconnect.core.auto import Connector
     from apscheduler.schedulers.background import BlockingScheduler
 
     assert configs.username != '', "please input your username with -u"
@@ -38,7 +38,7 @@ def create_job(configs):
 def run():
     config = build_config()
     if config.use_ui:
-        from .core import main_loop
+        from szu_autoconnect.core.ui import main_loop
 
         main_loop()
     else:
