@@ -1,2 +1,2 @@
-from core.auto import Connector
-from core.ui import main_loop
+from .auto import Connector
+from .ui import main_loop

@@ -38,7 +38,7 @@ def create_job(configs):
 def run():
     config = build_config()
     if config.use_ui:
-        from .core.ui import main_loop
+        from .core import main_loop
 
         main_loop()
     else:

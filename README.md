@@ -21,7 +21,9 @@
 
 安装
 
-`pip install szu-autoconnect`
+```bash
+pip install szu-autoconnect
+```
 
 ## 运行
 
