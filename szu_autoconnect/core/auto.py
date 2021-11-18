@@ -55,7 +55,10 @@ class Connector:
                 "OMKKey": "123456"
             }
             self.interval = config['interval']
-            logger.info(f"Auto-Connect Load config {config}")
+            print_config = config
+            # hide password
+            print_config['password'] = config['password'][:2] + '***' + config['password'][-2:]
+            logger.info(f"Auto-Connect Load config {print_config}")
         except KeyError as e:
             logger.error(f'Please check the config, {e}')
 
@@ -63,23 +66,36 @@ class Connector:
         # requests.packages.urllib3.disable_warnings()
         session = requests.session()
         r = session.post(self.login_url, headers=self.headers, data=self.data_send, verify=False)
+        logger.info("Posted")
         # print(r.text)
 
+    # def check_connect(self):
+    #     s = socket.socket()
+    #     s.settimeout(3)
+    #     try:
+    #         status = s.connect_ex((self.ping_ip, 443))
+    #         if status == 0:
+    #             s.close()
+    #             logger.info("Connected")
+    #             return True
+    #         else:
+    #             logger.info("Disconnected")
+    #             raise DisconnectError
+    #             # return False
+    #     except Exception as e:
+    #         logger.error(f'Find Error in check connect, {e}')
+    #         raise DisconnectError
+
     def check_connect(self):
-        s = socket.socket()
-        s.settimeout(3)
+        timeout = 5
         try:
-            status = s.connect_ex((self.ping_ip, 443))
-            if status == 0:
-                s.close()
-                logger.info("Connected")
-                return True
-            else:
-                logger.info("Disconnected")
-                raise DisconnectError
-                # return False
+            ping_ip = "https://" + self.ping_ip
+            request = requests.get(ping_ip, timeout=timeout)
+            logger.info("Connected")
+            return True
+        # except (requests.ConnectionError, requests.Timeout) as e:
         except Exception as e:
-            logger.error(f'Find Error in check connect, {e}')
+            logger.error(f'Disconnected, Error [{e}]')
             raise DisconnectError
 
     def stop(self):

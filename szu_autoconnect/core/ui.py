@@ -16,6 +16,7 @@ DEFAULT_SETTINGS = {
     'interval': 20,
     'pin': True,
 }
+
 # "Map" from the settings dictionary keys to the window's element keys
 SETTINGS_KEYS_TO_ELEMENT_KEYS = {
     'username': '-username-',
@@ -74,11 +75,35 @@ def start_work(scheduler):
         scheduler.start()
 
 
+# Temp definitions of the Window methods added to 4.46.0.7 of PySimpleGUI
+def keep_on_top_set(window):
+    """
+    Sets keep_on_top after a window has been created.  Effect is the same
+    as if the window was created with this set.  The Window is also brought
+    to the front
+    """
+    window.KeepOnTop = True
+    window.bring_to_front()
+    window.TKroot.wm_attributes("-topmost", 1)
+
+
+def keep_on_top_clear(window):
+    """
+    Clears keep_on_top after a window has been created.  Effect is the same
+    as if the window was created with this set.
+    """
+    window.KeepOnTop = False
+    window.TKroot.wm_attributes("-topmost", 0)
+
+
 def create_ui(settings):
     sg.theme('Topanga')
     title_font = ('Gigi', 18)
-    config_name_font = ('宋体', 10)
-    log_font = ('宋体', 9)
+    # config_name_font = ('宋体', 10)
+    # log_font = ('宋体', 9)
+    config_name_font = ('Courier', 10)
+    log_font = ('Courier', 9)
+    PIN = '📌'
 
     bar = [
         [
@@ -91,8 +116,11 @@ def create_ui(settings):
             sg.Col(
                 [
                     [
-                        sg.Check('Pin', enable_events=True, key='-pin-'),
+                        # sg.Check(PIN, enable_events=True, key='-pin-'),
+                        sg.Text(PIN, enable_events=True, k='-pin-', font='_ 12', pad=(0,0),  metadata=False,
+                            text_color='yellow', background_color=sg.theme_background_color()),
                         sg.Text(sg.SYMBOL_X, enable_events=True, key='-X-')  # '❎'
+                        
                     ]
                 ],
                 element_justification='r', grab=True, pad=(0, 0), expand_x=True)
@@ -106,26 +134,33 @@ def create_ui(settings):
     ]
 
     author_ui = [
-        sg.Text('作者: 红领巾二号', text_color='red', font=config_name_font, size=(38, 1), justification='right')
+        # sg.Text('作者: 红领巾二号', text_color='red', font=config_name_font, size=(38, 1), justification='right')
+        sg.Text('Author: Mr. Red Scarf No.2', text_color='red', font=config_name_font, size=(38, 1), justification='right')
     ]
 
     config_ui = [sg.Frame(
         layout=[
             [
-                sg.Text('网络选择: ', font=config_name_font, size=(10, 1)),
-                sg.Radio('教学区', key='-office-', group_id='zone', default=True),
-                sg.Radio('宿舍区', key='-dormitory-', group_id='zone')
+                # sg.Text('网络选择: ', font=config_name_font, size=(10, 1)),
+                # sg.Radio('教学区', key='-office-', group_id='zone', default=True),
+                # sg.Radio('宿舍区', key='-dormitory-', group_id='zone')
+                sg.Text('Zone: ', font=config_name_font, size=(12, 1)),
+                sg.Radio('office', key='-office-', group_id='zone', default=True),
+                sg.Radio('dormitory', key='-dormitory-', group_id='zone')
             ],
             [
-                sg.Text('用户名: ', font=config_name_font, size=(10, 1)),
+                # sg.Text('用户名: ', font=config_name_font, size=(10, 1)),
+                sg.Text('Username: ', font=config_name_font, size=(12, 1)),
                 sg.In(key='-username-', size=(25, 1))
             ],
             [
-                sg.Text('密码: ', font=config_name_font, size=(10, 1)),
+                # sg.Text('密码: ', font=config_name_font, size=(10, 1)),
+                sg.Text('Password: ', font=config_name_font, size=(12, 1)),
                 sg.In(key='-password-', size=(25, 1), password_char='*')
             ],
             [
-                sg.Text('间隔(s): ', font=config_name_font, size=(10, 1)),
+                # sg.Text('间隔(s): ', font=config_name_font, size=(10, 1)),
+                sg.Text('Interval(s): ', font=config_name_font, size=(12, 1)),
                 sg.Spin(values=[i for i in range(1, 1000)], initial_value=10, key='-interval-', size=(23, 1))
             ]
         ],
@@ -135,26 +170,27 @@ def create_ui(settings):
     log_ui = [sg.Frame(
         layout=[
             [
-                sg.MLine('', key='log', size=(40, 8), font=log_font)
+                sg.MLine('', key='log', size=(38, 8), font=log_font)
             ]
         ],
         title='Logs'
     )]
 
     tail_ui = [
-        sg.Button("Login", size=(7, 1)),
-        sg.Save(size=(7, 1)),
+        sg.Button("Login", size=(8, 1)),
+        sg.Save(size=(8, 1)),
         sg.Button('Pause', size=(7, 1)),
-        sg.Exit(size=(6, 1))
+        sg.Exit(size=(7, 1))
     ]
 
     total_ui = [bar, title_ui, author_ui, config_ui, tail_ui, log_ui, ]
 
     # return sg.Window('* SZU Auto Connector *', layout=total_ui, font='Helvetica 10', )
 
-    window = sg.Window('* SZU Auto Connector *', layout=total_ui, font='Helvetica 10',
-                       no_titlebar=True, finalize=True, keep_on_top=settings['pin']
-                       )
+    window = sg.Window(
+        '* SZU Auto Connector *', layout=total_ui, font='Helvetica 10',
+        no_titlebar=True, finalize=True, resizable=True, margins=(0,0), keep_on_top=settings['pin']
+    )
 
     for k, v in SETTINGS_KEYS_TO_ELEMENT_KEYS.items():  # update window with the values read from settings file
         try:
@@ -166,6 +202,12 @@ def create_ui(settings):
 
 
 def main_loop():
+
+    if 'keep_on_top_set' not in dir(sg.Window):
+        # print('You do not have a PySimpleGUI version with required methods. Using the temp ones from this file.')
+        sg.Window.keep_on_top_set = keep_on_top_set
+        sg.Window.keep_on_top_clear = keep_on_top_clear
+
     window, settings = None, load_settings(SETTINGS_FILE, DEFAULT_SETTINGS)
     scheduler = None
     pause_flag = None
@@ -224,9 +266,19 @@ def main_loop():
             break
 
         if event == '-pin-':
-            window.close()
-            window = None
-            settings['pin'] = values['-pin-']
+            window['-pin-'].metadata = not window['-pin-'].metadata     # use metadata to store current state of pin
+            if window['-pin-'].metadata:
+                window['-pin-'].update(text_color='red')
+                window.keep_on_top_set()
+            else:
+                window['-pin-'].update(text_color='yellow')
+                window.keep_on_top_clear()
+
+        # if event == '-pin-':
+        #     window.close()
+        #     window = None
+        #     settings['pin'] = values['-pin-']
+
 
     window.close()
 

@@ -1,6 +1,6 @@
 # SZU Auto Connect
 
-![web](https://img.shields.io/badge/SZU--AutoConnect-v1.0.3-green)
+![web](https://img.shields.io/badge/SZU--AutoConnect-v1.0.4-green)
 
 ![web](https://img.shields.io/badge/Python-≥3.6-blue)
 
@@ -21,7 +21,7 @@
 ## 2.1 下载 exe 文件运行
 
 前往 [Release](https://github.com/ackness/szu-autoconnect/releases) 下载所有版本, 
-或者 [点击直接下载 V1.0.3 版本](https://github.com/ackness/szu-autoconnect/releases/download/v1.0.3/SZU-AutoConnect-V1.0.3.exe).
+或者 [点击直接下载 V1.0.4 版本](https://github.com/ackness/szu-autoconnect/releases/download/v1.0.4/SZU-AutoConnect-V1.0.4.exe). (暂时没更新, 有需要自己可以打包, 见2.3.3)
 
 ## 2.2 从 pip 安装与运行 
 
@@ -116,7 +116,7 @@ python -m pysimplegui-exemaker.pysimplegui-exemaker
 
 # 3. 原理
 
-使用构造`POST 表单`完成上网请求, 和直接在网页端登录是一样的.
+使用构造 `POST 表单` 完成上网请求, 和直接在网页端登录是一样的.
 
 
 # 4. 前人的肩膀
